@@ -15,10 +15,14 @@ export default function Home({ posts }) {
             <span className="wave">👋🏻</span>, <span>I'm </span>
             <span className="text-sky-500">Aleksa Opacic</span>
           </h1>
-          <p>I'm a software engineer with a strong focus on blockchain protocol. Open-source contribution is something I'm truly passionate about. Off the coding screen, you'll often find me at conferences, exchanging ideas and constantly extending my knowledge.</p>
+          <p>
+            I'm a software engineer with a strong focus on blockchain protocol. Open-source
+            contribution is something I'm truly passionate about. Off the coding screen, you'll
+            often find me at conferences, exchanging ideas and constantly extending my knowledge.
+          </p>
           <Link
-              href="/about"
-              className="bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 px-4 rounded mt-4 inline-block"
+            href="/about"
+            className="mt-4 inline-block rounded bg-sky-500 px-4 py-2 font-bold text-white hover:bg-sky-600"
           >
             About Me
           </Link>
