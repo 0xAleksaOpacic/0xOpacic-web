@@ -1,19 +1,13 @@
 const projectsData = [
   {
-    title: 'A Search Engine',
-    description: `What if you could look up any information in the world? Webpages, images, videos
-    and more. Google has many features to help you find exactly what you're looking
-    for.`,
-    imgSrc: '/static/images/google.png',
-    href: 'https://www.google.com',
+    title: 'MerklePatriciaTrie',
+    description: `A Go implementation of the Merkle Patricia Trie (MPT), a structure that combines the benefits of Merkle Trees and Patricia Tries, optimized for efficient and verifiable storage of key-value pairs`,
+    href: 'https://github.com/Aleksao998?tab=repositories',
   },
   {
-    title: 'The Time Machine',
-    description: `Imagine being able to travel back in time or to the future. Simple turn the knob
-    to the desired date and press "Go". No more worrying about lost keys or
-    forgotten headphones with this simple yet affordable solution.`,
-    imgSrc: '/static/images/time-machine.jpg',
-    href: '/blog/the-time-machine',
+    title: 'LightningUserVault',
+    description: `A high-performance storage solution for rapid user data retrieval and management.`,
+    href: 'https://github.com/Aleksao998/LightningUserVault',
   },
 ]
 

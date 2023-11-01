@@ -4,11 +4,26 @@ import siteMetadata from '@/data/siteMetadata'
 import { formatDate } from 'pliny/utils/formatDate'
 import NewsletterForm from 'pliny/ui/NewsletterForm'
 
-const MAX_DISPLAY = 5
+const MAX_DISPLAY = 3
 
 export default function Home({ posts }) {
   return (
     <>
+      <div className="mt-7 flex items-center justify-between space-y-4">
+        <div className="space-y-4">
+          <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
+            <span className="wave">👋🏻</span>, <span>I'm </span>
+            <span className="text-sky-500">Aleksa Opacic</span>
+          </h1>
+          <p>I'm a software engineer with a strong focus on blockchain protocol. Open-source contribution is something I'm truly passionate about. Off the coding screen, you'll often find me at conferences, exchanging ideas and constantly extending my knowledge.</p>
+          <Link
+              href="/about"
+              className="bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 px-4 rounded mt-4 inline-block"
+          >
+            About Me
+          </Link>
+        </div>
+      </div>
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
         <div className="space-y-2 pb-8 pt-6 md:space-y-5">
           <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
@@ -79,11 +94,6 @@ export default function Home({ posts }) {
           >
             All Posts &rarr;
           </Link>
-        </div>
-      )}
-      {siteMetadata.newsletter?.provider && (
-        <div className="flex items-center justify-center pt-4">
-          <NewsletterForm />
         </div>
       )}
     </>
