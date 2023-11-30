@@ -18,9 +18,20 @@ All this data underscores the importance of cross-chain communication in the cur
 
 But with so many bridging protocols available, what makes LayerZero stand out? In this blog, I will share everything I've learned while researching LayerZero.
 
-This blog post is the first in a series where I will attempt to understand how different blockchain bridging protocols work. By clicking on the ***Blockchain Bridging*** tag, you can view other posts on the same topic.
+This blog post is the first in a series where I will attempt to understand how different blockchain bridging protocols work. By clicking on the [Blockchain Bridging](https://0x-opacic-web.vercel.app/tags/blockchain-bridging) tag, you can view other posts on the same topic.
 
-## LayerZero Overview
+### The Challenge: Trustless Valid Delivery
+
+For any cross-chain protocol, the main goal is to achieve something called Trustless Valid Delivery. This is essential for these protocols to work properly.
+
+Trustless Valid Delivery means two things:
+1. ***Trustless***: This means the process doesn’t need to depend on trusting any single person or group. In the blockchain world, this translates to the system being decentralized. There's no single point where someone can control or mess up the data being transferred.
+2. ***Valid Delivery***: It’s not just about sending data from one place to another. It's crucial that the data reaches its destination without being changed and is correctly used on the blockchain where it arrives. This requires ways to check that what's sent is exactly what's received and used.
+
+Trustless Valid Delivery is really important. In blockchain, where safety and not relying on central control are key, making sure data can move between chains safely and without needing a central authority is crucial for strong and dependable cross-chain protocols.
+
+
+## LayerZero
 
 > LayerZero is an omnichain interoperability protocol designed for lightweight message passing across chains. LayerZero provides authentic and guaranteed message delivery with configurable trustlessness.
 
@@ -28,14 +39,84 @@ LayerZero is not a blockchain; it is a protocol. Much like how HTTPS facilitates
 
 ![cross-chain](/static/images/layerZero/cross-chain.png)
 
+> The next sub-section provides just an overview of LayerZero. For a complete understanding of the full protocol, I highly recommend going through the LayerZero whitepaper. It's a really great read and offers in-depth insights into how everything works. You can find the [whitepaper](https://layerzero.network/publications/LayerZero_Whitepaper_V1.1.pdf)
+
+### Overview
+
+The main part of LayerZero is the LayerZero Endpoint, which consists of smart contracts on each blockchain in the network. 
+These contracts are responsible for sending, verifying, and receiving messages. The endpoints have been set up on [various mainnets](https://layerzero.gitbook.io/docs/technical-reference/mainnet/supported-chain-ids), 
+enabling them to communicate with different blockchains.
+
+The way LayerZero works is that a User Application (UA) on one blockchain sends a message to a UA on another blockchain through these endpoints. 
+The endpoints ensure that the messages are not just sent but are also correctly received and understood on the other side.
+
+To make sure the message transfer is both secure and decentralized, LayerZero uses Oracles and Relayers. 
+Oracles are there to provide reliable, up-to-date information from outside the blockchain. 
+Relayers are responsible for moving the messages between blockchains. They check that the message sent is exactly the same as the one received, keeping the transaction safe and trustworthy.
 
 
-### But how does it works?
+### Visualizing the Transaction Flow
 
-Before we can dive deep into how the protocol works, it is important to understand a couple of key concepts:
+After reading the LayerZero whitepaper, I decided to create my own illustration of the transaction flow in Excalidraw. 
+This visual representation is based on the explanations in the whitepaper and is designed to help clarify how transactions move through the LayerZero protocol.
 
-1. [User Application](https://layerzero.gitbook.io/docs/faq/faq-1#what-is-a-user-application): A User Application (UA) is any contract that uses LayerZero to send and receive messages between blockchains.
-2. [LayerZero Endpoint](https://layerzero.gitbook.io/docs/faq/layerzero-endpoint): In LayerZero, messages are sent and received by LayerZero Endpoints, which handle message transmission, verification, and receipt. These endpoints consist of two components: a collection of versioned messaging libraries, and a proxy to route messages to the correct library version.
-3. [Ultra Light Node](https://layerzero.gitbook.io/docs/faq/faq-1#what-is-an-oracle): An Ultra Light Node is an official LayerZero endpoint library.
-4. [Oracle](https://chain.link/education/blockchain-oracles): Oracles provide a method for the decentralized Web3 ecosystem to access existing data sources.
-5. [Relayer](https://layerzero.gitbook.io/docs/ecosystem/relayer): Relayers are responsible for relaying messages from one chain to another.
+![protocol](/static/images/layerZero/protocol.png)
+
+### Examining the Independence of Oracle and Relayer in LayerZero
+
+While reading the whitepaper, one aspect that particularly caught my attention was the security concern related to the independence of the Oracle and Relayer in the LayerZero protocol. The whitepaper explicitly states: 
+
+> To ensure valid delivery, the only requirement is that for any given message sent using the LayerZero protocol, the Oracle and Relayer must be independent of each other.
+
+This implies that the protocol itself doesn't guarantee that these entities are always separate, which is a critical point for ensuring the security and trustlessness of the system.
+
+Furthermore, the whitepaper points out a scenario that amplifies this concern: 
+
+> The block header provided by the Oracle and the transaction proof provided by the Relayer are both invalid, but still match.
+
+Interestingly, I'm not the only one who noticed this potential issue. The team at L2Beat has delved into this topic extensively in their [article](https://medium.com/l2beat/circumventing-layer-zero-5e9f652a5d3e). They provide a thorough examination of how the interdependence of the Oracle and Relayer could be circumvented, posing a risk to the protocol's integrity.
+
+This article from L2Beat highlights the importance of independent Oracles and Relayers in maintaining the security framework of LayerZero. It’s a crucial read for anyone looking to understand the potential vulnerabilities and the necessary measures to mitigate them.
+
+### The Strengths of LayerZero's Design
+
+On the positive side,  I was particularly impressed by its flexibility, especially how it allows individuals to create and run their own Relayer and Oracle implementations. 
+This feature really stood out to me as it emphasizes a decentralized approach, which is at the core of blockchain technology. 
+For anyone who's curious or wants to experiment, LayerZero provides detailed guidelines for custom setups of a [Relayer](https://layerzero.gitbook.io/docs/ecosystem/relayer) and an [Oracle](https://layerzero.gitbook.io/docs/ecosystem/oracle) in their documentation.
+
+Another aspect that caught my attention is the diversity of Oracles supported by LayerZero. Currently, the protocol works with:
+1. Google Cloud Oracle (default)
+2. Chainlink Oracle
+3. ZklightClient
+4. TSS Oracle
+
+Each Oracle brings its unique strength to the table, enhancing the protocol's capability. I see this as a strategic move that not only boosts LayerZero's functionality but also its reliability and enable great partnerships.
+
+Furthermore, the concept of the LayerZero Endpoint makes sense. Its presence on each supported chain means any blockchain with this Endpoint can interact with others in the network. 
+This approach simplifies adding new blockchains, enhancing the network effect.
+I find this particularly advantageous as it means more networks can join easily, potentially leading to greater user adoption. 
+The easier it is to connect different blockchains, the more beneficial the protocol is for everyone involved.
+
+## Conclusion 
+
+As I wrap up this exploration of LayerZero, I want to share the resources that were instrumental in deepening my understanding of this protocol. These materials provided a mix of technical details, security insights, and practical examples that helped shape my perspective.
+
+### Reading:
+
+1. The starting point was the [Official LayerZero Documentation](Official Doc: https://layerzero.gitbook.io/docs/), which laid the foundation.
+2. For a summarized take on the whitepaper, this [Medium Article](https://medium.com/coinmonks/layerzero-the-first-omnichain-interoperability-protocol-for-cross-chain-communication-e5d5e37b99a9) was quite great.
+3. The in-depth [LayerZero Whitepaper](https://layerzero.network/pdf/LayerZero_Whitepaper_Release.pdf) itself offered comprehensive insights.
+4. Security aspects were covered in this [Medium Article](https://medium.com/l2beat/circumventing-layer-zero-5e9f652a5d3e)
+5. And for another take i looked into this [Medium Article](https://www.alphaplease.com/p/chainlink-ccip-layerzero-wars-crypto-web3)
+
+
+### Watching:
+
+1. This [QuickNode Explanation](https://www.youtube.com/watch?v=r4YHPN9qiGI) on YouTube provided a great visual aid.
+
+### Code:
+
+1. Diving into the [LayerZero Official GitHub Repository](https://github.com/LayerZero-Labs/LayerZero) was particularly helpful for understanding the technical implementation.
+2. And the [Official Solidity Examples](https://github.com/LayerZero-Labs/solidity-examples) gave me some practical coding insights.
+
+Each of these resources played a part in shaping my understanding of LayerZero, from its basic functioning to its more intricate security considerations and practical applications.
