@@ -1,0 +1,88 @@
+---
+title: My First Zero Knowledge Circuit
+date: '2024-01-07'
+tags: ['blockchain', 'Zero Knowledge', '=nil;Foundation']
+draft: false
+summary: This is a Part 1 of a series of articles that will help you get started with =nil; Foundation toolchain. It covers the basics of creating a ZK Circuit and generating a proof for it.
+---
+
+## Introduction
+
+If you're reading this article, you probably already know about Zero Knowledge Proofs. If you do, feel free to jump to the next section. If not, let me explain it simply.
+
+Zero knowledge proofs are a method where someone can prove a fact is true to another person without giving away secret details. In this setup, we have two roles: the prover, who creates the proof, and the verifier, whose role is to assess the proof's validity without learning any secret information
+
+But how does this work?
+
+There are many examples to explain this. A famous one is the Ali Baba cave story, which you can read about [here](https://en.wikipedia.org/wiki/Zero-knowledge_proof#Ali_Baba_cave). Another clear and illustrative way to understand zero-knowledge proofs is through the example of coloured balls and a colour-blind friend. This scenario is both simple and effective in demonstrating the key principles of zero-knowledge proofs.
+
+### Coloured balls and a colour-blind friend
+
+Imagine you have two balls that look the same, but one is red and the other green. Your friend Victor, who can't tell red from green, thinks these balls are identical. Victor is doubtful that the balls are actually different colors. You want to show Victor they are different without telling him which is red and which is green.
+
+**Here's how you do it:** You give Victor the balls. He hides them and shows you one. Then he either switches it with the other or shows the same one again. He asks if he switched the ball. This process is repeated many times.
+
+You can tell if Victor switched the balls by their color. If the balls were the same color, you couldn't consistently guess right more than half the time. If you keep identifying the switches correctly over several tries, Victor will believe the balls are different colors.
+
+> This proof is a zero-knowledge proof because Victor doesn't learn which ball is which color; he gains no extra information about the balls, yet he becomes certain that the balls are of different colors.
+
+## Exploring =nil; Foundation's Role in Zero-Knowledge Technology
+
+The =nil; Foundation is a leader in zero-knowledge technology, focused on making zkProofs and trustless data management easy for developers. They provide tools for scalable, secure computing and data access.
+
+### =nil; Foundation Toolchain Highlights:
+
+**=nil; zkSharding:** A powerful zkRollup solution that boosts Ethereum's throughput to over 60,000 transactions per second. It's a game-changer for web3 developers, enabling them to create scalable and secure applications with ease.
+
+**Proof Market:** This decentralized marketplace revolutionizes the way zero-knowledge proofs are handled. It automatically generates high-performance circuits suitable for various protocols, significantly streamlining the development process.
+
+**zkLLVM**: A unique compiler that transforms C++ or Rust code into zero-knowledge circuits. It simplifies and accelerates the generation of zkProofs, making the implementation process both time and cost-efficient.
+
+**Placeholder & Crypto3 Suite:** This is a flexible and robust zero-knowledge proof system paired with a comprehensive cryptography suite. It's perfect for developers looking for quick, secure prototyping in zero-knowledge technology.
+
+In summary, the =nil; Foundation's toolchain provides a comprehensive, easy-to-use suite of tools essential for modern zero-knowledge application development.
+
+
+
+## Starting with Zero Knowledge Circuits
+
+To test out the =nil; Foundation toolchain, we will use [zkllvm-template](https://github.com/NilFoundation/zkllvm-template). This repository serves as both a tutorial and a template project for creating an application based on the zkLLVM toolchain.
+
+### Prerequisites
+1. Linux based OS (I am using Ubuntu 22.04, CCX43 	16 AMD 	64 GB 	360 GB)
+2. Follow the instructions to set up repository and to pull docker image ([1](https://github.com/NilFoundation/zkllvm-template#1-repository-setup), [2](https://github.com/NilFoundation/zkllvm-template#2-using-the-image-ghcrionilfoundationtoolchain))
+
+### Writing the circuit
+For this tutorial, we will be creating a simple circuit that will check if a number is even or odd. The circuit will take a number as input and output a boolean value.
+
+Zkllvm-template already provides an example circuit which you can find in "[src/](https://github.com/NilFoundation/zkllvm-template/tree/master/src)" directory. But we will be creating a new circuit from scratch.
+
+> Note: Examples of many different circuits, along with their inputs, can be found in the [zkllvm-examples](https://github.com/NilFoundation/zkLLVM/tree/master/examples) repository
+
+#### Circuit code (main.cpp):
+
+```c
+#include <cstdint>
+
+[[circuit]] bool is_even(uint32_t a) {
+    bool res = (a % 2 == 0);
+
+    __builtin_assigner_exit_check(res);
+
+    return res;
+}
+```
+
+In this code, we define a circuit function **is_even** to determine if a given unsigned 32-bit integer **(uint32_t a)** is even. The function calculates if the number is even using **(a % 2 == 0)** and stores the result in **bool res**.
+
+The **__builtin_assigner_exit_check(res)** is a built-in function that enforces a condition check within the circuit.
+If res is not true, it stops the circuit and rejects the proof.
+This ensures that the circuit only proceeds when the condition is met, which in this case, is when the number is even.
+
+#### Inputs (main-input.json):
+
+```json
+[
+  {"int": 11}
+]
+```

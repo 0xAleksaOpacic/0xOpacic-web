@@ -1,19 +1,19 @@
 ---
-title: Understanding LayerZero - An Ongoing Exploration of Cross-Chain Communication
+title: Understanding LayerZero V1 - An Ongoing Exploration of Cross-Chain Communication
 date: '2023-11-26'
 tags: ['blockchain', 'Blockchain Bridging', 'Layer Zero']
 draft: false
 summary: This article breaks down LayerZero, an omnichain interoperability protocol
 ---
 
-> Note: This research is a work in progress. The insights and information presented are evolving as I spend more time researching this protocol. Therefore, some details may be refined as new findings come to light.
+> Note: This research was done for LayerZero V1, currently there is a new version of LayerZero (V2) which is not covered in this article.
 
 
 ## Introduction
 
 At the time of writing this article, the blockchain ecosystem resembles the Wild West. Blockchain networks are popping up left and right, from new L1s to L2s, app-chains — you name it, and someone is probably working on it. One thing is sure: for the time being, we need a reliable and secure way of transferring arbitrary data from one chain to another.
 
-A few months ago, i came accross an [article](https://www.coindesk.com/business/2023/07/25/bridge-protocol-layerzero-passes-50m-cross-chain-messages/) stating that LayerZero just passed 50M cross-chain messages just 3 months after they [raised 120M](https://www.coindesk.com/business/2023/04/04/crypto-protocol-layerzero-raises-120m-series-b-at-3b-valuation/?_gl=1*kuqhfq*_up*MQ..*_ga*NjQwNDA2NDY0LjE3MDEwMzQzODM.*_ga_VM3STRYVN8*MTcwMTAzNDM4Mi4xLjAuMTcwMTAzNDM4Mi4wLjAuMA..) from 33 backers.
+A few months ago, I came accross an [article](https://www.coindesk.com/business/2023/07/25/bridge-protocol-layerzero-passes-50m-cross-chain-messages/) stating that LayerZero just passed 50M cross-chain messages just 3 months after they [raised 120M](https://www.coindesk.com/business/2023/04/04/crypto-protocol-layerzero-raises-120m-series-b-at-3b-valuation/?_gl=1*kuqhfq*_up*MQ..*_ga*NjQwNDA2NDY0LjE3MDEwMzQzODM.*_ga_VM3STRYVN8*MTcwMTAzNDM4Mi4xLjAuMTcwMTAzNDM4Mi4wLjAuMA..) from 33 backers.
 All this data underscores the importance of cross-chain communication in the current landscape.
 
 But with so many bridging protocols available, what makes LayerZero stand out? In this blog, I will share everything I've learned while researching LayerZero.
@@ -39,7 +39,7 @@ LayerZero is not a blockchain; it is a protocol. Much like how HTTPS facilitates
 
 ![cross-chain](/static/images/layerZero/cross-chain.png)
 
-> The next sub-section provides just an overview of LayerZero. For a complete understanding of the full protocol, I highly recommend going through the LayerZero whitepaper. It's a really great read and offers in-depth insights into how everything works. You can find the [whitepaper](https://layerzero.network/publications/LayerZero_Whitepaper_V1.1.pdf)
+> The next subsection provides just an overview of LayerZero. For a complete understanding of the full protocol, I highly recommend going through the LayerZero whitepaper. It's a really great read and offers in-depth insights into how everything works. You can find the [whitepaper](https://layerzero.network/publications/LayerZero_Whitepaper_V1.1.pdf)
 
 ### Overview
 
