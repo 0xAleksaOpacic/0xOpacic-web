@@ -50,7 +50,7 @@ To test out the =nil; Foundation toolchain, we will use [zkllvm-template](https:
 
 ### Prerequisites
 1. Linux based OS (I am using Ubuntu 22.04, CCX43 	16 AMD 	64 GB 	360 GB)
-2. Follow the instructions to set up repository and to pull docker image ([1](https://github.com/NilFoundation/zkllvm-template#1-repository-setup), [2](https://github.com/NilFoundation/zkllvm-template#2-using-the-image-ghcrionilfoundationtoolchain))
+2. Follow the instructions to set up repository and to pull docker image ([1](https://github.com/NilFoundation/zkllvm-template/tree/nkaskov-update-cmake#1-repository-setup), [2](https://github.com/NilFoundation/zkllvm-template/tree/nkaskov-update-cmake#2-toolchain-installation))
 
 ### Writing the circuit
 For this tutorial, we will be creating a simple circuit that will check if a number is even or odd. The circuit will take a number as input and output a boolean value.
@@ -73,16 +73,123 @@ Zkllvm-template already provides an example circuit which you can find in "[src/
 }
 ```
 
-In this code, we define a circuit function **is_even** to determine if a given unsigned 32-bit integer **(uint32_t a)** is even. The function calculates if the number is even using **(a % 2 == 0)** and stores the result in **bool res**.
+In this code, we define a circuit function `is_even` to determine if a given unsigned 32-bit integer `(uint32_t a)` is even. The function calculates if the number is even using `(a % 2 == 0)` and stores the result in `bool res`.
 
-The **__builtin_assigner_exit_check(res)** is a built-in function that enforces a condition check within the circuit.
+The `__builtin_assigner_exit_check(res)` is a built-in function that enforces a condition check within the circuit.
 If res is not true, it stops the circuit and rejects the proof.
 This ensures that the circuit only proceeds when the condition is met, which in this case, is when the number is even.
 
-#### Inputs (main-input.json):
+
+#### Input (main-input.json):
+
+```json
+[
+  {"int": 12}
+]
+```
+In the `is_even` function, as indicated by its signature, the required input is a single unsigned 32-bit integer `(uint32_t)`. This input specification is crucial for understanding how to structure the input data.
+
+In the context of the `zkllvm-template`, inputs are provided in a JSON format, encapsulated within an array structure. Each input value is represented as a field within this array.
+
+### Compiling, Running, and Verifying the Circuit with zkLLVM
+
+**Step 1: Compile the Circuit**
+
+First, we focus on the `./src/main.cpp` file, where our is_even circuit is. This circuit is marked with `[[circuit]]`. We need to compile it using the zkLLVM compiler. Here’s how:
+
+1. In the project's root directory, run the command:
+```bash
+cmake -G "Ninja" -B ${ZKLLVM_BUILD:-build} -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=clang-zkllvm .
+```
+2. Then compile it with:
+```bash
+ninja -C ${ZKLLVM_BUILD:-build} template.
+```
+
+This will create a file `template.ll` in the `build/src` directory. This file is the compiled version of our circuit.
+
+**Step 2: Create the Circuit File and Assignment Table**
+
+Now we need to turn our compiled circuit into a format that can be used, and get our input data ready.
+
+Run this command:
+```bash
+assigner -b build/src/template.ll \
+         -i src/main-input.json \
+         --circuit template.crct \
+         --assignment-table template.tbl \
+         -e pallas
+```
+This command makes two things: a file `template.crct` (our circuit in binary format) and `template.tbl` (which has our input data ready for the next steps).
+
+**Step 3: Make and Check the Proof Locally**
+
+Now, let's create and verify our proof. We do this using the `proof-generator-single-threaded` tool:
+
+```bash
+proof-generator-single-threaded \
+--circuit="template.crct" \
+--assignment-table="template.tbl" \
+--proof="proof.bin"
+```
+
+During this process, you should see messages indicating the successful generation and verification of the proof. Here's how the successful log output will look:
+
+```bash
+Proof generated
+Verifying proof...
+Proof is verified
+Writing proof to "proof.bin"
+Proof written
+```
+
+These messages confirm that the proof has been generated and verified correctly. The final proof file will be named `./proof.bin`
+
+## Verifying Proof with Invalid Input
+
+In the previous section, we successfully generated and verified a proof using an even number as input.
+But what happens if we use an odd number? Let's find out by changing our input to an odd number and repeating the same steps.
+This will demonstrate how our circuit responds to inputs that don't meet the criteria
+
+#### Adjusting the Input
+
+First, we modify the input in our `main-input.json` file to an odd number, such as 11:
 
 ```json
 [
   {"int": 11}
 ]
 ```
+
+#### Repeating the Steps
+
+Now, we repeat the compilation and assignment table creation steps as before. Then, we run the proof-generator-single-threaded tool again with this adjusted input:
+
+```bash
+proof-generator-single-threaded \
+--circuit="template.crct" \
+--assignment-table="template.tbl" \
+--proof="proof.bin"
+```
+
+This time, the messages during the proof generation and verification process will be different. Here's what you should see:
+
+```bash
+Proof generated
+Verifying proof...
+Error: Something went wrong - proof is not verified
+```
+
+This output shows that although the proof was generated, it failed during the verification step.
+This is because our circuit logic specifically checks for even numbers, and our input (11) is odd.
+It's important to note that in this case, the proof.bin file will not be produced, as the proof did not pass the verification.
+
+## Conclusion
+
+That's a wrap on our tutorial for creating your first zero-knowledge circuit using the =nil; Foundation toolchain.
+We've walked through the steps of writing, compiling, and verifying a circuit - both with valid and invalid inputs
+
+This article marks the start of a series where we'll dive into more details about the =nil; Foundation's toolchain.
+We'll explore more advanced topics and showcase how to leverage their toolchain for sophisticated zero-knowledge proof applications.
+
+Happy coding!
