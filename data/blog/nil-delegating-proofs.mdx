@@ -1,0 +1,55 @@
+---
+title: Your PC Can't Handle ZK Proofs? Try =nil; Proof Market
+date: '2024-01-13'
+tags: ['blockchain', 'Zero Knowledge', '=nil;Foundation']
+draft: false
+summary: Part 2 in our series, focusing on using =nil; Proof Market for efficient ZK proof generation, offering a solution for both resource-constrained systems and complex proof requirements
+---
+
+> Note: If you haven't already, I recommend checking out [Part 1](https://0x-opacic-web.vercel.app/blog/nil-my-first-zk-ciruit) of this series. It covers the basics of creating and locally generating Zero Knowledge proofs using the =nil; Foundation toolchain.
+
+## Introduction
+
+Welcome to Part 2 of our series on Zero Knowledge proofs and the =nil; Foundation toolchain. 
+In our first article, we covered the basics of creating a Zero Knowledge (ZK) Circuit and generating a proof for it on a local machine using =nil; toolchain. 
+However, some circuits might be too complex or demanding for a standard PC to handle effectively. In some cases, your machine might not be powerful enough, 
+or it may not generate the proof quickly enough to meet your needs. This is where the =nil; Foundation's Proof Market comes into play.
+
+## =nil; Proof Market
+
+The =nil; Proof Market acts like a bridge connecting those who need Zero Knowledge proofs with those who can produce them. 
+It's essentially a marketplace for non-interactive zero-knowledge proofs, which are typically compute-intensive and can take hours to generate.
+At its core, the Proof Market is a solution for outsourcing. It allows anyone to request a zkProof, and then a network of specialized proof producers respond to these requests. 
+This setup creates a free, open, and self-sustaining market, where the needs for complex proof generation are met by those with the resources and expertise to produce them efficiently.
+
+> Note: Currently, Proof Market accepts circuits generated using the zkLLVM compiler and based on the Placeholder proof system. In the future it will support various proof systems
+
+I strongly encourage you to take your time and go through the [official documentation](https://docs.nil.foundation/proof-market/). It covers everything you need to know to know about a Proof Market.
+
+## Let's try 
+
+Remember the `"is_even"` circuit we played around with in [Part 1](https://0x-opacic-web.vercel.app/blog/nil-my-first-zk-ciruit)? We're going to take another crack at it, but this time, we're going to use the =nil; Proof Market to do the heavy lifting for us.
+
+
+#### Circuit code (main.cpp):
+
+```c
+#include <cstdint>
+
+[[circuit]] bool is_even(uint32_t a) {
+    bool res = (a % 2 == 0);
+
+    __builtin_assigner_exit_check(res);
+
+    return res;
+}
+```
+
+#### Input (main-input.json):
+
+```json
+[
+  {"int": 12}
+]
+```
+

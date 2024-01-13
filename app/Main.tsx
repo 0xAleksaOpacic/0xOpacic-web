@@ -16,8 +16,7 @@ export default function Home({ posts }) {
             <span className="text-sky-500">Aleksa Opacic</span>
           </h1>
           <p>
-            I'm a software engineer with a strong focus on blockchain protocol. Open-source
-            contribution is something I'm truly passionate about. Off the coding screen, you'll
+            I'm a software engineer with a strong focus on blockchain protocol. Off the coding screen, you'll
             often find me at conferences, exchanging ideas and constantly extending my knowledge.
           </p>
           <Link
